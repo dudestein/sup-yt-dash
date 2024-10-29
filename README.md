@@ -55,3 +55,10 @@ Based on the requirements provided, these are the assumptions I came to:
 4. Trimming information is being saved to localStorage, but not retrieved. Moving to the context may fix this, so will do that first and check back on it.
 
 5. Red Bull surfing images are coming at a different aspect ratio and look different than the others. Will have to normalize.
+
+### Missing items
+
+- Playwright - E2E testing
+- Vitest - Unit testing
+- StoryBook - Component Preview and kitchen sink
+- Overall cleanup and component organization
