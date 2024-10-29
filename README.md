@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+(_to speedup the process of setting it up with some standards_)
+
 ## Getting Started
 
 First, run the development server:
@@ -16,21 +18,31 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+(_I kept the font they use in the boilerplate project_)
 
-To learn more about Next.js, take a look at the following resources:
+## Project assumptions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Based on the requirements provided, these are the assumptions I came to:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Avoiding external libraries and packages
+- Responsive layout using Tailwind utility methods
+- The desdcription of the sidebar only states title/description, but I also want to display the Thumbnails for the videos as I believe that enriches the experiece for the user.
 
-## Deploy on Vercel
+## Functionality that should be provided
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] - Video Search
+- [ ] - Pagination
+- [ ] - Video Trimming by setting start/end times for playback
+- [ ] - Remember user options for trimming
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## What I'm using
+
+- **Typescript** - standard from create-next-app
+- **Tailwind** - standard from create-next-app
+- **Youtube Iframe API** - Rather than using the YouTube API for search functionality, I'm using a JSON file containing search results. This approach minimizes dependencies, simplifying evaluation since no YouTube API keys are required. Additionally, the abstraction of search functionality falls outside the scope of this exercise. However, to comply with YouTube's policies, we’ll still embed videos using the YouTube iframe, as direct streaming isn’t permitted without their player.
+
+## Problems and compromises
+
+None so far... ;)
