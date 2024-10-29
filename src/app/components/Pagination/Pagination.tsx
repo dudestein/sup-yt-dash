@@ -10,6 +10,11 @@ const Pagination = <T,>({ list, pageSize }: PaginationProps<T>) => {
   const { currentPage, setCurrentPage } = useAppContext();
   const totalPages = Math.ceil(list.length / pageSize);
 
+  if (totalPages <= 1) {
+    setCurrentPage(1);
+    return null;
+  }
+
   const goToPage = (page: number) => {
     setCurrentPage(page);
   };

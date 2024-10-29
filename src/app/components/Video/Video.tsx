@@ -107,8 +107,10 @@ const YouTubePlayer = () => {
     }
   }, [currentVideo]);
 
-  const handlePlay = () => {
-    // playerInstanceRef.current?.seekTo(trim?.start || 0, true);
+  const handlePlay = async () => {
+    const trim = await getClippingForVideoId(currentVideo);
+    debugger;
+    playerInstanceRef.current?.seekTo(trim?.start || 0, true);
     playerInstanceRef.current?.playVideo();
     setIsPlaying(true);
   };
@@ -117,6 +119,14 @@ const YouTubePlayer = () => {
     playerInstanceRef.current?.pauseVideo();
     setIsPlaying(false);
   };
+
+  if (!currentVideo) {
+    return (
+      <div className="p-2 md:p-0 w-full h-64 max-h-screen rounded">
+        Select a video from the sidebar to start playing
+      </div>
+    );
+  }
 
   return (
     <>

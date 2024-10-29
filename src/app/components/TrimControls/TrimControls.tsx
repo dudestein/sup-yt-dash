@@ -1,8 +1,12 @@
-import { setClippingForVideoId } from "@/app/helpers/clipping";
+import {
+  setClippingForVideoId,
+  getClippingForVideoId,
+} from "@/app/helpers/clipping";
 import { Trim } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppContext } from "@/app/context/AppContext";
+
 type TrimControlsProps = {
-  videoId: string | null;
   videoDuration: number;
   start?: number;
   end?: number;
@@ -10,12 +14,11 @@ type TrimControlsProps = {
   onTrimChange?: () => Trim;
 };
 const TrimControls: React.FC<TrimControlsProps> = ({
-  videoId,
   start,
   end,
   videoDuration,
-  progress,
 }) => {
+  const { currentVideo } = useAppContext();
   const [clipStart, setClipStart] = useState(0 || start);
   const [clipEnd, setClipEnd] = useState(end || videoDuration);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,10 +33,21 @@ const TrimControls: React.FC<TrimControlsProps> = ({
       ) {
         setClipEnd(parseInt(e.target.value));
       }
-      setClippingForVideoId(videoId, { start: clipStart, end: clipEnd });
     }
+    setClippingForVideoId(currentVideo, { start: clipStart, end: clipEnd });
   };
-  if (!videoId) {
+  useEffect(() => {
+    const updateClipping = async () => {
+      if (!currentVideo) {
+        return;
+      }
+      const trim = await getClippingForVideoId(currentVideo);
+      setClipStart(trim?.start || 0);
+      setClipEnd(trim?.end || videoDuration);
+    };
+    updateClipping();
+  }, [currentVideo]);
+  if (!currentVideo) {
     return null;
   }
   return (

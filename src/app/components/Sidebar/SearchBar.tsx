@@ -5,14 +5,17 @@ import { ChangeEvent } from "react";
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { setSearchResults, videoList } = useAppContext();
+  const { setSearchResults, setCurrentPage, videoList } = useAppContext();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(e.target.value);
-    if (searchTerm === "") {
-      setSearchResults(videoList?.items);
+    if (videoList) {
+      if (searchTerm === "") {
+        setSearchResults(videoList?.items);
+      }
+      setSearchResults(searchVideo(searchTerm, videoList?.items));
+      setCurrentPage(1);
     }
-    setSearchResults(searchVideo(searchTerm, videoList?.items));
   };
   return (
     <div className="w-full z-20">

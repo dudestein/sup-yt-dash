@@ -48,6 +48,8 @@ const SideBar = () => {
   const videos =
     getPageResults(searchResults || videoList?.items, currentPage || 1) || [];
 
+  useEffect(() => {});
+
   useEffect(() => {
     const fetchData = async () => {
       try {
