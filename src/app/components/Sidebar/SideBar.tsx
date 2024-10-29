@@ -164,4 +164,6 @@ const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
   );
 };
 
+SideBar.displayName = "SideBar";
+
 export default SideBar;

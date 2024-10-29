@@ -1,15 +1,34 @@
 "use client";
-import SideBar from "./components/Sidebar/SideBar";
+import { useState } from "react";
+import SideBar from "./components/SideBar/SideBar";
+import YouTubePlayer from "./components/Video/Video";
+import { getClippingForVideoId } from "./helpers/clipping";
+import { Trim } from "@/types";
 
 export default function Home() {
-  const handleVideoSelection = (videoId: string) => {
+  const [currentVideo, setCurrentVideo] = useState<string | null>(null);
+  const [clipping, setClipping] = useState<Trim | null>(null);
+  const handleVideoSelection = async (videoId: string) => {
     console.log(videoId);
+    setCurrentVideo(videoId);
+    const currentClipping = await getClippingForVideoId(currentVideo);
+    setClipping(currentClipping);
   };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col  row-start-2 items-center sm:items-start">
+    <div className="flex flex-col-reverse md:flex-row justify-items-stretch">
+      <aside
+        id="sidebar"
+        className="h-screen md:w-64 pb-36 md:pb-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-y-auto"
+        aria-label="Sidebar"
+      >
         <SideBar handleVideoSelection={handleVideoSelection} />
-        Youtube Dashboard
+      </aside>
+      <main
+        className="bg-white dark:bg-gray-900 md:p-4 rounded grow-2 flex flex-col justify-items-stretch sticky top-0 md:static"
+        aria-label="Main Content"
+      >
+        <YouTubePlayer videoId={currentVideo} trim={clipping} />
       </main>
     </div>
   );

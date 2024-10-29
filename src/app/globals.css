@@ -7,6 +7,21 @@
   --foreground: #171717;
 }
 
+@layer components {
+  .icon-button {
+    @apply inline-flex items-center px-2 py-1 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700;
+    &:first-child {
+      @apply rounded-l border-r-0;
+    }
+    &:last-child {
+      @apply rounded-r;
+    }
+    &.active {
+      @apply bg-gray-900 text-white dark:bg-white dark:text-black;
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -18,4 +33,99 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.controls {
+  @apply mt-4 flex justify-center relative;
+}
+
+.track {
+  flex: 1;
+  position: relative;
+}
+
+/* 
+  Range Slider
+  This will serve the purpose of displaying the intarface of the video
+  trimming tool. It will simulate the presence of 2 dragging pins on the
+  timeline, one for the start of the clip and another for the end. Since 
+  HTML does not provide a native range slider with 2 thumbs, we will use
+  overlapping range sliders to simulate the effect. This will safe some
+  time and effort in developing a javascript solution to make the calculations
+  and the dragging of the pins.
+*/
+.range-slider {
+  @apply w-full h-4 left-0 top-0 absolute;
+  -webkit-appearance: none;
+  -webkit-transition: 0.2s;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  pointer-events: none;
+  transition: opacity 0.2s;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: all;
+    width: 5px;
+    height: 20px;
+    background-color: currentColor;
+    cursor: pointer;
+    border-radius: 3px;
+    top: 0;
+    &::before {
+      display: block;
+      border: 1px solid black;
+      background-color: #fff;
+      width: 10px;
+      height: 10px;
+      content: ".";
+    }
+  }
+
+  &::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: all;
+    width: 5px;
+    height: 20px;
+    background-color: currentColor;
+    cursor: pointer;
+    &::before {
+      display: block;
+      border: 1px solid currentColor;
+      background-color: currentColor;
+      width: 10px;
+      height: 10px;
+      content: ".";
+    }
+  }
+
+  &::-webkit-slider-thumb:active {
+    box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+    -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+}
+
+.video-list {
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+.truncate-multi-line {
+  display: -webkit-box; /* Enables the flex container behavior */
+  -webkit-box-orient: vertical; /* Sets vertical orientation */
+  overflow: hidden; /* Hides the overflowed text */
+  text-overflow: ellipsis; /* Adds ellipsis (…) */
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
 }
