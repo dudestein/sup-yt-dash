@@ -146,10 +146,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       </div>
       <div className="controls items-center gap-2 p-2 md:p-0 grow-0">
         {isPlaying ? (
-          <button
-            onClick={handlePause}
-            className="bg-gray-500 dark:bg-gray-200 text-white dark:text-gray-800 p-2 rounded hover:bg-gray-600 dark:hover:bg-gray-300 focus:outline-none"
-          >
+          <button onClick={handlePause} className="control-button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -160,10 +157,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
             </svg>
           </button>
         ) : (
-          <button
-            onClick={handlePlay}
-            className="bg-gray-500 dark:bg-gray-200 text-white dark:text-gray-800 p-2 rounded hover:bg-gray-600 dark:hover:bg-gray-300 focus:outline-none"
-          >
+          <button onClick={handlePlay} className="control-button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
