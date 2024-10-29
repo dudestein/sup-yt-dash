@@ -2,27 +2,18 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import TrimControls from "../TrimControls/TrimControls";
-import { Trim } from "@/types";
+import { getClippingForVideoId } from "@/app/helpers/clipping";
+import { useAppContext } from "@/app/context/AppContext";
 
-interface YouTubePlayerProps {
-  videoId: string | null;
-  width?: string | number;
-  height?: string | number;
-  autoplay?: boolean;
-  loop?: boolean;
-  trim?: Trim | null;
-  onReady?: (player: YT.Player) => void;
-}
-
-const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
-  videoId,
-  width = "100%",
-  height = "100%",
-  autoplay = false,
-  loop = false,
-  trim = { start: undefined, end: undefined },
-  onReady,
-}) => {
+const YouTubePlayer = () => {
+  const defaultOptions = {
+    width: "100%",
+    height: "100%",
+    autoplay: false,
+    loop: false,
+    trim: { start: undefined, end: undefined },
+  };
+  const { currentVideo } = useAppContext();
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const playerInstanceRef = useRef<YT.Player | null>(null);
   const playbackIntervalRef = useRef<number | null>(null);
@@ -35,28 +26,29 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     (data: any) => {
       if (data === YT.PlayerState.ENDED) {
         setIsPlaying(false);
-        if (loop) {
+        if (defaultOptions.loop) {
           playerInstanceRef.current?.playVideo();
         }
       }
     },
-    [loop]
+    [defaultOptions.loop]
   );
 
   useEffect(() => {
-    console.log(videoId, progress);
+    console.log(currentVideo, progress);
   }, [progress]);
 
   useEffect(() => {
-    const initializePlayer = () => {
-      if (playerContainerRef.current && window.YT && videoId) {
+    const initializePlayer = async () => {
+      if (playerContainerRef.current && window.YT && currentVideo) {
+        const trim = await getClippingForVideoId(currentVideo);
         const player = new YT.Player(playerContainerRef.current, {
-          videoId: videoId,
+          videoId: currentVideo,
           width: "100%",
           height: "100%",
           playerVars: {
-            autoplay: autoplay ? 1 : 0,
-            loop: loop ? 1 : 0,
+            autoplay: defaultOptions.autoplay ? 1 : 0,
+            loop: defaultOptions.loop ? 1 : 0,
             controls: 0,
             modestbranding: 1,
             rel: 0,
@@ -69,9 +61,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
               playerInstanceRef.current = event.target;
               startProgressTracking();
               setVideoDuration(playerInstanceRef.current?.getDuration());
-              if (onReady) {
-                onReady(event.target);
-              }
             },
           },
         });
@@ -108,28 +97,18 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       if (playbackIntervalRef.current)
         clearInterval(playbackIntervalRef.current);
     };
-  }, [
-    videoId,
-    width,
-    height,
-    autoplay,
-    loop,
-    onReady,
-    trim?.start,
-    trim?.end,
-    updatePlayBackState,
-  ]);
+  }, [currentVideo, updatePlayBackState]);
 
   useEffect(() => {
-    if (playerInstanceRef.current && videoId) {
+    if (playerInstanceRef.current && currentVideo) {
       setIsPlaying(false);
-      playerInstanceRef.current.loadVideoById(videoId);
+      playerInstanceRef.current.loadVideoById(currentVideo);
       playerInstanceRef.current.stopVideo();
     }
-  }, [videoId]);
+  }, [currentVideo]);
 
   const handlePlay = () => {
-    playerInstanceRef.current?.seekTo(trim?.start || 0, true);
+    // playerInstanceRef.current?.seekTo(trim?.start || 0, true);
     playerInstanceRef.current?.playVideo();
     setIsPlaying(true);
   };
@@ -169,10 +148,10 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
           </button>
         )}
         <TrimControls
-          videoId={videoId}
+          videoId={currentVideo}
           videoDuration={videoDuration || 0}
-          start={trim?.start || 0}
-          end={trim?.end || videoDuration}
+          start={0}
+          end={videoDuration}
           progress={progress}
         />
       </div>

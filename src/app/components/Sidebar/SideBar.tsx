@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { fetchJson, FetchError } from "@/app/lib/fetchJson";
 import { YoutubeSearchResponse } from "@/types";
 import VideoThumb from "./VideoItem";
+import { useAppContext } from "@/app/context/AppContext";
 
 export async function getServerSideProps() {
   try {
@@ -27,12 +28,8 @@ export async function getServerSideProps() {
   }
 }
 
-type SideBarProps = {
-  handleVideoSelection: (videoId: string) => void;
-};
-
-const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
-  const [data, setData] = useState<YoutubeSearchResponse | null>(null);
+const SideBar = () => {
+  const { videoList, setCurrentVideo, setVideoList } = useAppContext();
   const [error, setError] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<"list" | "thumbnail">(
     "thumbnail"
@@ -44,7 +41,7 @@ const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
         const result = await fetchJson<YoutubeSearchResponse>(
           "/mockdata/data.json"
         );
-        setData(result);
+        setVideoList(result);
       } catch (err) {
         if (err instanceof FetchError) {
           setError(`Error: ${err.message}`);
@@ -62,7 +59,7 @@ const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
   };
 
   if (error) return <p>{error}</p>;
-  if (!data) return <p>Loading...</p>;
+  if (!videoList) return <p>Loading...</p>;
 
   return (
     <>
@@ -150,12 +147,12 @@ const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
           </div>
         </div>
         <div className="video-list flex z-0 flex-col overflow-auto order-1 md:order-2 w-full md:w-64">
-          {data.items.map((item) => (
+          {videoList.items.map((item) => (
             <VideoThumb
               key={`${item.id.videoId}_${item.id.kind}`}
               video={item}
               displayMode={displayMode}
-              onClick={() => handleVideoSelection(item.id.videoId)}
+              onClick={() => setCurrentVideo(item.id.videoId)}
             />
           ))}
         </div>

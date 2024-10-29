@@ -50,4 +50,6 @@ Based on the requirements provided, these are the assumptions I came to:
 
 2. Some of the images are not loading(or the videos are private). Meaning we need a fallback for the images I'm trying to display in the sidebar as well. Next's <Image/> doesn't support fallback, so let's extend that.
 
-3. By passing props around I end up breaking the server side benefits of nextjs by having to annotate the files with `'use client'`. will need a better organization to prevent this.
+3. By passing props around I end up breaking the server side benefits of nextjs by having to annotate the files with `'use client'`. will need a better organization to prevent this. -- _added AppContext to hold all of the state instead of scattered props going around_
+
+4. Trimming information is being saved to localStorage, but not retrieved. Moving to the context may fix this, so will do that first and check back on it.
