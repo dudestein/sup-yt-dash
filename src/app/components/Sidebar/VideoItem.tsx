@@ -1,6 +1,7 @@
 import { SearchResult } from "@/types/api";
 import ThumbDisplay from "./ThumbDisplay";
 import DetailDisplay from "./DetailDisplay";
+const { useAppContext } = require("@/app/context/AppContext");
 
 type VideoItemProps = {
   video: SearchResult;
@@ -23,8 +24,13 @@ const VideoItem: React.FC<VideoItemProps> = ({
   displayMode,
   onClick,
 }) => {
+  const { currentVideo } = useAppContext();
+  const classNames = ["video-item"];
+  if (currentVideo === video.id.videoId) {
+    classNames.push("active");
+  }
   return (
-    <div className="video-item" onClick={onClick}>
+    <div className={classNames.join(" ")} onClick={onClick}>
       {displayMode === "thumbnail" && (
         <ThumbDisplay
           title={video.snippet.title}
