@@ -1,4 +1,4 @@
-import { Trim } from "@/types";
+import { SearchResult, Trim, YoutubeSearchResponse } from "@/types";
 
 export const getClippingForVideoId = async (videoId: string | null) => {
   if (!videoId) {
@@ -21,4 +21,36 @@ export const setClippingForVideoId = async (
   }
   // store in localStorage the serialized clipping information containing start and end times
   localStorage.setItem(`${videoId}-clipping`, JSON.stringify(clipping));
+};
+
+export const searchVideo = (
+  query: string,
+  videoList: SearchResult[] | null
+) => {
+  if (!videoList) {
+    return [] as SearchResult[];
+  }
+  if (!query) {
+    return videoList;
+  }
+  return videoList.filter((item) => {
+    /*
+     * simple simple simple search.
+     * search in title and description of the video
+     *
+     * Ideally we'd make sure this search happens on the server side, with some optimized
+     * fuzzy search algorithm, but for now this will do.
+     */
+    return (
+      item.snippet.title.toLowerCase().includes(query.toLowerCase()) ||
+      item.snippet.description.toLowerCase().includes(query.toLowerCase())
+    );
+  });
+};
+
+export const getVideoById = (
+  videoId: string,
+  videoList: YoutubeSearchResponse
+) => {
+  return videoList.items.find((item) => item.id.videoId === videoId);
 };

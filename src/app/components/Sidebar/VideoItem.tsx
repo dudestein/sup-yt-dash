@@ -1,7 +1,7 @@
 import { SearchResult } from "@/types/api";
 import ThumbDisplay from "./ThumbDisplay";
 import DetailDisplay from "./DetailDisplay";
-const { useAppContext } = require("@/app/context/AppContext");
+import { useAppContext } from "@/app/context/AppContext";
 
 type VideoItemProps = {
   video: SearchResult;

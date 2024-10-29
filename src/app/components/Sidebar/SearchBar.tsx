@@ -1,8 +1,25 @@
+import { useState } from "react";
+import { useAppContext } from "@/app/context/AppContext";
+import { searchVideo } from "@/app/helpers/clipping";
+import { ChangeEvent } from "react";
+
 const SearchBar = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const { setSearchResults, videoList } = useAppContext();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value);
+    if (searchTerm === "") {
+      setSearchResults(videoList?.items);
+    }
+    setSearchResults(searchVideo(searchTerm, videoList?.items));
+  };
   return (
     <div className="w-full z-20">
       <div className="relative">
         <input
+          value={searchTerm}
+          onChange={handleChange}
           className="search-input"
           placeholder="Search by title or description..."
         />

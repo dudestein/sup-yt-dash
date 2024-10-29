@@ -30,11 +30,19 @@ export async function getServerSideProps() {
 }
 
 const SideBar = () => {
-  const { videoList, setCurrentVideo, setVideoList } = useAppContext();
+  const {
+    videoList,
+    searchResults,
+    setCurrentVideo,
+    setVideoList,
+    setSearchResults,
+  } = useAppContext();
   const [error, setError] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<"list" | "thumbnail">(
     "thumbnail"
   );
+
+  const videos = searchResults || videoList?.items || [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +51,7 @@ const SideBar = () => {
           "/mockdata/data.json"
         );
         setVideoList(result);
+        setSearchResults(result.items);
       } catch (err) {
         if (err instanceof FetchError) {
           setError(`Error: ${err.message}`);
@@ -123,7 +132,7 @@ const SideBar = () => {
           </div>
         </div>
         <div className="video-list flex z-0 flex-col overflow-auto order-1 md:order-2 w-full md:w-64">
-          {videoList.items.map((item) => (
+          {videos.map((item) => (
             <VideoThumb
               key={`${item.id.videoId}_${item.id.kind}`}
               video={item}

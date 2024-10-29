@@ -1,14 +1,14 @@
-import { YoutubeSearchResponse } from "@/types";
+import { YoutubeSearchResponse, SearchResult } from "@/types";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface AppContextType {
   currentVideo: string | null;
   videoList: YoutubeSearchResponse | null;
-  searchResults: YoutubeSearchResponse | null;
+  searchResults: SearchResult[] | null;
   currentPage: number | null;
   setCurrentVideo: (video: string) => void;
   setCurrentPage: (pageNumber: number) => void;
-  setSearchResults: (results: YoutubeSearchResponse) => void;
+  setSearchResults: (results: SearchResult[]) => void;
   setVideoList: (list: YoutubeSearchResponse) => void;
 }
 
@@ -24,8 +24,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [videoList, setVideoList] = useState<YoutubeSearchResponse | null>(
     null
   );
-  const [searchResults, setSearchResults] =
-    useState<YoutubeSearchResponse | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
+    null
+  );
   const [currentVideo, setCurrentVideo] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 

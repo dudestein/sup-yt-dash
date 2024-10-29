@@ -32,7 +32,7 @@ Based on the requirements provided, these are the assumptions I came to:
 
 ## Functionality that should be provided
 
-- [ ] - Video Search
+- [x] - Video Search
 - [x] - Video Playback
 - [ ] - Pagination
 - [ ] - Video Trimming by setting start/end times for playback
