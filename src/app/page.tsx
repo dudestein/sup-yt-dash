@@ -9,7 +9,6 @@ export default function Home() {
   const [currentVideo, setCurrentVideo] = useState<string | null>(null);
   const [clipping, setClipping] = useState<Trim | null>(null);
   const handleVideoSelection = async (videoId: string) => {
-    console.log(videoId);
     setCurrentVideo(videoId);
     const currentClipping = await getClippingForVideoId(currentVideo);
     setClipping(currentClipping);
@@ -19,7 +18,7 @@ export default function Home() {
     <div className="flex flex-col-reverse md:flex-row justify-items-stretch">
       <aside
         id="sidebar"
-        className="h-screen md:w-64 pb-36 md:pb-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 overflow-y-auto"
+        className="h-screen md:w-64 pb-36 md:pb-0 bg-gray-800 border-r border-gray-600 dark:bg-gray-800 dark:border-gray-700 overflow-y-auto"
         aria-label="Sidebar"
       >
         <SideBar handleVideoSelection={handleVideoSelection} />

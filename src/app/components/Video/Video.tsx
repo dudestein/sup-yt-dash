@@ -33,7 +33,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   const updatePlayBackState = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (data: any) => {
-      console.log(data);
       if (data === YT.PlayerState.ENDED) {
         setIsPlaying(false);
         if (loop) {
@@ -44,9 +43,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     [loop]
   );
 
-  useEffect(() => {
-    console.log(videoId, progress);
-  }, [progress]);
+  useEffect(() => {}, [progress]);
 
   useEffect(() => {
     const initializePlayer = () => {
@@ -101,7 +98,6 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     if (window.YT && window.YT.Player) {
       initializePlayer();
     } else {
-      console.log("loading youtube iframe api");
       window.onYouTubeIframeAPIReady = initializePlayer;
     }
 
@@ -143,8 +139,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
 
   return (
     <>
-      <h1>{videoId}</h1>
-      <div className="p-2 md:p-0 w-full grow-2 h-80 max-h-screen rounded">
+      <div className="p-2 md:p-0 w-full grow-2 h-64 max-h-screen rounded">
         <div ref={playerContainerRef} className="grow-2 rounded" />
       </div>
       <div className="controls items-center gap-2 p-2 md:p-0 grow-0">

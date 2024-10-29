@@ -28,7 +28,7 @@ export async function getServerSideProps() {
 }
 
 type SideBarProps = {
-  handleVideoSelection: Function;
+  handleVideoSelection: (videoId: string) => void;
 };
 
 const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
@@ -67,7 +67,7 @@ const SideBar: React.FC<SideBarProps> = ({ handleVideoSelection }) => {
   return (
     <>
       <div className="flex items-center flex-col w-full md:w-64">
-        <div className="flex z-10 flex-col fixed bottom-0 left-0 w-full md:sticky md:top-0 bg-white p-4 dark:bg-black gap-2">
+        <div className="flex z-10 flex-col fixed bottom-0 left-0 w-full md:sticky md:top-0 bg-gray-900 p-4 dark:bg-black gap-2 text-white">
           <div className="w-full z-20">
             <div className="relative">
               <input

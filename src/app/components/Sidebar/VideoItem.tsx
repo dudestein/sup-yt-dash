@@ -24,10 +24,7 @@ const VideoItem: React.FC<VideoItemProps> = ({
   onClick,
 }) => {
   return (
-    <div
-      className="flex flex-column gap-2 items-start p-4 hover:bg-gray-400 border-b border-b-gray-100"
-      onClick={onClick}
-    >
+    <div className="video-item" onClick={onClick}>
       {displayMode === "thumbnail" && (
         <ThumbDisplay
           title={video.snippet.title}
