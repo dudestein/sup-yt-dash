@@ -28,7 +28,7 @@ Based on the requirements provided, these are the assumptions I came to:
 
 - Avoiding external libraries and packages
 - Responsive layout using Tailwind utility methods
-- The desdcription of the sidebar only states title/description, but I also want to display the Thumbnails for the videos as I believe that enriches the experiece for the user.
+- The desdcription of the sidebar only states title/description, but I also want to display the Thumbnails for the videos as I believe that enriches the experiece for the user. - _solved by providing a toggle to switch between both modes_
 
 ## Functionality that should be provided
 
@@ -46,3 +46,7 @@ Based on the requirements provided, these are the assumptions I came to:
 ## Problems and compromises
 
 1. YT type missing when adding the library and attempting to use it - Solved by just overloading the global window type to have the YT property.
+
+2. Some of the images are not loading(or the videos are private). Meaning we need a fallback for the images I'm trying to display in the sidebar as well. Next's <Image/> doesn't support fallback, so let's extend that.
+
+3. By passing props around I end up breaking the server side benefits of nextjs by having to annotate the files with `'use client'`. will need a better organization to prevent this.
