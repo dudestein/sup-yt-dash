@@ -5,7 +5,7 @@ interface AppContextType {
   currentVideo: string | null;
   videoList: YoutubeSearchResponse | null;
   searchResults: SearchResult[] | null;
-  currentPage: number | null;
+  currentPage: number;
   setCurrentVideo: (video: string) => void;
   setCurrentPage: (pageNumber: number) => void;
   setSearchResults: (results: SearchResult[]) => void;

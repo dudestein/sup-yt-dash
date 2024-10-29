@@ -6,6 +6,8 @@ import { YoutubeSearchResponse } from "@/types";
 import VideoThumb from "./VideoItem";
 import SearchBar from "./SearchBar";
 import { useAppContext } from "@/app/context/AppContext";
+import { getPageResults } from "@/app/helpers/clipping";
+import Pagination from "../Pagination/Pagination";
 
 export async function getServerSideProps() {
   try {
@@ -36,13 +38,15 @@ const SideBar = () => {
     setCurrentVideo,
     setVideoList,
     setSearchResults,
+    currentPage,
   } = useAppContext();
   const [error, setError] = useState<string | null>(null);
   const [displayMode, setDisplayMode] = useState<"list" | "thumbnail">(
     "thumbnail"
   );
 
-  const videos = searchResults || videoList?.items || [];
+  const videos =
+    getPageResults(searchResults || videoList?.items, currentPage || 1) || [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,7 +134,9 @@ const SideBar = () => {
               </button>
             </div>
           </div>
+          <Pagination list={searchResults || videoList.items} pageSize={10} />
         </div>
+
         <div className="video-list flex z-0 flex-col overflow-auto order-1 md:order-2 w-full md:w-64">
           {videos.map((item) => (
             <VideoThumb

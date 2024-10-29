@@ -34,7 +34,7 @@ Based on the requirements provided, these are the assumptions I came to:
 
 - [x] - Video Search
 - [x] - Video Playback
-- [ ] - Pagination
+- [x] - Pagination
 - [ ] - Video Trimming by setting start/end times for playback
 - [ ] - Remember user options for trimming
 
@@ -53,3 +53,5 @@ Based on the requirements provided, these are the assumptions I came to:
 3. By passing props around I end up breaking the server side benefits of nextjs by having to annotate the files with `'use client'`. will need a better organization to prevent this. -- _added AppContext to hold all of the state instead of scattered props going around_
 
 4. Trimming information is being saved to localStorage, but not retrieved. Moving to the context may fix this, so will do that first and check back on it.
+
+5. Red Bull surfing images are coming at a different aspect ratio and look different than the others. Will have to normalize.

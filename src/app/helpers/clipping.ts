@@ -54,3 +54,16 @@ export const getVideoById = (
 ) => {
   return videoList.items.find((item) => item.id.videoId === videoId);
 };
+
+export const getPageResults = (
+  items: SearchResult[] | undefined,
+  page: number,
+  perPage: number = 10
+) => {
+  if (!items) {
+    return [] as SearchResult[];
+  }
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
+  return items.slice(start, end);
+};
