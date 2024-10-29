@@ -45,4 +45,4 @@ Based on the requirements provided, these are the assumptions I came to:
 
 ## Problems and compromises
 
-None so far... ;)
+1. YT type missing when adding the library and attempting to use it - Solved by just overloading the global window type to have the YT property.

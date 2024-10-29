@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -29,6 +30,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        {/*Load Youtube iFrame API script to interact with the video player */}
+        <Script
+          src="//www.youtube.com/iframe_api"
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );
