@@ -43,7 +43,9 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
     [loop]
   );
 
-  useEffect(() => {}, [progress]);
+  useEffect(() => {
+    console.log(videoId, progress);
+  }, [progress]);
 
   useEffect(() => {
     const initializePlayer = () => {

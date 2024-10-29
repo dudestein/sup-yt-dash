@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en light">
+    <html lang="en" className="light h-screen">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-white dark:bg-black text-black dark:text-white`}
       >
         {children}
         {/*Load Youtube iFrame API script to interact with the video player */}

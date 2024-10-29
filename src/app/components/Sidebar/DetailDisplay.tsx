@@ -13,7 +13,7 @@ interface ThumbDisplayProps {
 const VideoTile: React.FC<ThumbDisplayProps> = ({ title, description }) => {
   return (
     <div className="flex flex-col gap-2 items-start">
-      <h5 className="text-lg font-semibold">{title}</h5>
+      <h5 className="text-lg font-semibold text-white">{title}</h5>
       <p className="truncate-multi-line text-sm text-gray-500">
         {truncateLongWords(description)}
       </p>
