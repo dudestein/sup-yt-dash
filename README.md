@@ -36,7 +36,7 @@ Based on the requirements provided, these are the assumptions I came to:
 - [x] - Video Playback
 - [x] - Pagination
 - [ ] - Video Trimming by setting start/end times for playback
-- [ ] - Remember user options for trimming
+- [x] - Remember user options for trimming
 
 ## What I'm using
 
@@ -58,7 +58,24 @@ Based on the requirements provided, these are the assumptions I came to:
 
 ### Missing items
 
+- i18n & a11y
+- More Linters to keep everything in check
 - Playwright - E2E testing
 - Vitest - Unit testing
+- Pre-commit hooks
 - StoryBook - Component Preview and kitchen sink
 - Overall cleanup and component organization
+- Dockerize? - Maybe overkill, maybe not?
+
+# More ideas
+
+- Preview when use drags one of the markers
+
+  - Store current playhead position
+  - SeekTo marker position
+
+- Display thumbnails - Does this api even provide this? (hacking a second player with seekTo could simulate this, but it's slow)
+- Add playhead position and interaction with the playback progressbar to allow user to seek by clicking (limiting to positions betwen the markers)
+- Controls for autoplay and loop at the top of the screen
+- Buttons to forcibly toggle dark/light mode since the css already supports it
+- Autoplay the current playlist (including moving to the next page, maybe?)
