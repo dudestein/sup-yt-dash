@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
+import { AppProvider } from "./context/AppContext";
 
 const geistSans = localFont({
   src: "./assets/fonts/GeistVF.woff",
@@ -29,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-white dark:bg-black text-black dark:text-white`}
       >
-        {children}
+        <AppProvider>{children}</AppProvider>
         {/*Load Youtube iFrame API script to interact with the video player */}
         <Script
           src="//www.youtube.com/iframe_api"

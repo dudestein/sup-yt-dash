@@ -1,3 +1,5 @@
+"use client";
+
 import { YoutubeSearchResponse, SearchResult } from "@/types";
 import { createContext, useContext, useState, ReactNode } from "react";
 

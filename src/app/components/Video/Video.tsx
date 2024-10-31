@@ -1,18 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import TrimControls from "../TrimControls/TrimControls";
+import { TrimControls } from "./TrimControls";
 import { getClippingForVideoId } from "@/app/helpers/clipping";
 import { useAppContext } from "@/app/context/AppContext";
+import { Trim } from "@/types";
 
 const YouTubePlayer = () => {
-  const defaultOptions = {
-    width: "100%",
-    height: "100%",
-    autoplay: false,
-    loop: false,
-    trim: { start: undefined, end: undefined },
-  };
   const { currentVideo } = useAppContext();
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const playerInstanceRef = useRef<YT.Player | null>(null);
@@ -20,97 +14,112 @@ const YouTubePlayer = () => {
   const [progress, setProgress] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [videoDuration, setVideoDuration] = useState<number>(0);
+  const [currentClip, setCurrentClip] = useState<Trim>({
+    start: undefined,
+    end: undefined,
+  });
 
   const updatePlayBackState = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (data: any) => {
+    (data: YT.PlayerState) => {
+      // Playing and Buffering states are considered as playing as the user doesn't have to manually play the video
+      setIsPlaying(
+        [YT.PlayerState.PLAYING, YT.PlayerState.BUFFERING].includes(data)
+      );
       if (data === YT.PlayerState.ENDED) {
-        setIsPlaying(false);
-        if (defaultOptions.loop) {
-          playerInstanceRef.current?.playVideo();
-        }
+        console.log("Clip Ended");
       }
     },
-    [defaultOptions.loop]
+    [setIsPlaying]
   );
 
-  useEffect(() => {
-    console.log(currentVideo, progress);
-  }, [progress]);
+  const loadVideo = async () => {
+    if (currentVideo && playerInstanceRef.current) {
+      playerInstanceRef.current.cueVideoById(currentVideo);
+      setVideoDuration(playerInstanceRef.current.getDuration());
+      updateClipping();
+    }
+  };
+
+  const trackProgress = () => {
+    if (
+      playerInstanceRef.current &&
+      playerInstanceRef.current.getPlayerState() === YT.PlayerState.PLAYING
+    ) {
+      const currentTime = playerInstanceRef.current.getCurrentTime();
+      const duration = playerInstanceRef.current.getDuration();
+      const progressPercent = (currentTime / duration) * 100;
+      setProgress(progressPercent);
+    }
+  };
+
+  const updateClipping = async () => {
+    const clipping = (await getClippingForVideoId(currentVideo)) || {
+      start: undefined,
+      end: undefined,
+    };
+    setCurrentClip(clipping);
+    playerInstanceRef.current?.seekTo(clipping.start ?? 0, true);
+  };
 
   useEffect(() => {
     const initializePlayer = async () => {
-      if (playerContainerRef.current && window.YT && currentVideo) {
-        const trim = await getClippingForVideoId(currentVideo);
+      if (
+        !playerInstanceRef.current &&
+        playerContainerRef.current &&
+        window.YT &&
+        currentVideo
+      ) {
         const player = new YT.Player(playerContainerRef.current, {
           videoId: currentVideo,
           width: "100%",
           height: "100%",
           playerVars: {
-            autoplay: defaultOptions.autoplay ? 1 : 0,
-            loop: defaultOptions.loop ? 1 : 0,
+            autoplay: 0,
+            loop: 0,
             controls: 0,
             modestbranding: 1,
             rel: 0,
             enablejsapi: 1,
-            start: trim?.start,
-            end: trim?.end,
           },
           events: {
             onReady: (event) => {
+              console.log("Player Ready");
               playerInstanceRef.current = event.target;
+              setVideoDuration(event.target.getDuration());
               startProgressTracking();
-              setVideoDuration(playerInstanceRef.current?.getDuration());
             },
           },
         });
 
         player.addEventListener("onStateChange", (event) => {
+          setVideoDuration(playerInstanceRef.current?.getDuration() ?? 0);
           updatePlayBackState(event.data);
         });
 
         const startProgressTracking = () => {
+          console.log("track progress");
           playbackIntervalRef.current = window.setInterval(() => {
-            if (
-              playerInstanceRef.current &&
-              playerInstanceRef.current.getPlayerState() ===
-                YT.PlayerState.PLAYING
-            ) {
-              const currentTime = playerInstanceRef.current.getCurrentTime();
-              const duration = playerInstanceRef.current.getDuration();
-              const progressPercent = (currentTime / duration) * 100;
-              setProgress(progressPercent);
-            }
+            trackProgress();
           }, 100);
         };
       }
     };
 
-    if (window.YT && window.YT.Player) {
+    if (!playerInstanceRef.current) {
+      console.log("No Player Instance, initializing...");
       initializePlayer();
     } else {
-      window.onYouTubeIframeAPIReady = initializePlayer;
+      loadVideo();
     }
 
-    // Clean up intervals on unmount
+    // Clean up intervals and events on unmount
     return () => {
       if (playbackIntervalRef.current)
         clearInterval(playbackIntervalRef.current);
     };
-  }, [currentVideo, updatePlayBackState]);
-
-  useEffect(() => {
-    if (playerInstanceRef.current && currentVideo) {
-      setIsPlaying(false);
-      playerInstanceRef.current.loadVideoById(currentVideo);
-      playerInstanceRef.current.stopVideo();
-    }
-  }, [currentVideo]);
+  }, [currentVideo, playerContainerRef.current]);
 
   const handlePlay = async () => {
-    const trim = await getClippingForVideoId(currentVideo);
-    debugger;
-    playerInstanceRef.current?.seekTo(trim?.start || 0, true);
     playerInstanceRef.current?.playVideo();
     setIsPlaying(true);
   };
@@ -158,10 +167,9 @@ const YouTubePlayer = () => {
           </button>
         )}
         <TrimControls
-          videoId={currentVideo}
-          videoDuration={videoDuration || 0}
-          start={0}
-          end={videoDuration}
+          videoDuration={videoDuration}
+          start={currentClip.start}
+          end={currentClip.end}
           progress={progress}
         />
       </div>

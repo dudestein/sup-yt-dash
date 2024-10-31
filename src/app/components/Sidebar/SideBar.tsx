@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchJson, FetchError } from "@/app/lib/fetchJson";
-import { YoutubeSearchResponse } from "@/types";
 import VideoThumb from "./VideoItem";
 import SearchBar from "./SearchBar";
-import { useAppContext } from "@/app/context/AppContext";
 import { getPageResults } from "@/app/helpers/clipping";
-import Pagination from "../Pagination/Pagination";
+import Pagination from "../Shared/Pagination/Pagination";
+import { useAppContext } from "@/app/context/AppContext";
+import { SearchResult } from "@/types";
 
 export async function getServerSideProps() {
   try {
@@ -32,15 +31,9 @@ export async function getServerSideProps() {
 }
 
 const SideBar = () => {
-  const {
-    videoList,
-    searchResults,
-    setCurrentVideo,
-    setVideoList,
-    setSearchResults,
-    currentPage,
-  } = useAppContext();
-  const [error, setError] = useState<string | null>(null);
+  const { videoList, searchResults, setCurrentVideo, currentPage } =
+    useAppContext();
+
   const [displayMode, setDisplayMode] = useState<"list" | "thumbnail">(
     "thumbnail"
   );
@@ -50,32 +43,9 @@ const SideBar = () => {
 
   useEffect(() => {});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await fetchJson<YoutubeSearchResponse>(
-          "/mockdata/data.json"
-        );
-        setVideoList(result);
-        setSearchResults(result.items);
-      } catch (err) {
-        if (err instanceof FetchError) {
-          setError(`Error: ${err.message}`);
-        } else {
-          setError("An unknown error occurred");
-        }
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleDisplayModeChange = (mode: "list" | "thumbnail") => {
     setDisplayMode(mode);
   };
-
-  if (error) return <p>{error}</p>;
-  if (!videoList) return <p>Loading...</p>;
 
   return (
     <>
@@ -136,7 +106,10 @@ const SideBar = () => {
               </button>
             </div>
           </div>
-          <Pagination list={searchResults || videoList.items} pageSize={10} />
+          <Pagination
+            list={searchResults || videoList?.items || ([] as SearchResult[])}
+            pageSize={10}
+          />
         </div>
 
         <div className="video-list flex z-0 flex-col overflow-auto order-1 md:order-2 w-full md:w-64">

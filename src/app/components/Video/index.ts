@@ -1,2 +1,2 @@
 export * from "./Video";
-export * from "../SideBar/VideoItem";
+export * from "./TrimControls";

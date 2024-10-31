@@ -44,6 +44,28 @@ Based on the requirements provided, these are the assumptions I came to:
 - **Tailwind** - standard from create-next-app
 - **Youtube Iframe API** - Rather than using the YouTube API for search functionality, I'm using a JSON file containing search results. This approach minimizes dependencies, simplifying evaluation since no YouTube API keys are required. Additionally, the abstraction of search functionality falls outside the scope of this exercise. However, to comply with YouTube's policies, we’ll still embed videos using the YouTube iframe, as direct streaming isn’t permitted without their player.
 
+## Project Structure
+
+For the most part it follows what "create-next-app" suggest. When using opinionated frameworks such as Next, it rarely pays off to change things around, but I made a couple of personal preference changes by moving the fonts into an assets folder and creating a couple of other folders under the app folder.
+
+```
+└── 📁src
+    └── 📁app
+        └── 📁assets
+            └── 📁fonts
+            ├── 📁images
+        └── 📁components
+            └── 📁Shared
+                └── 📁Pagination
+            └── 📁SideBar
+            └── 📁TrimControls
+            └── 📁Video - The player itself and any internal component to the player
+        └── 📁context  - state management
+        └── 📁helpers  - reusable supporting methods
+        └── 📁services - (previously lib/) - Holds the api functions to fetch data
+    └── 📁types
+```
+
 ## Problems and compromises
 
 1. YT type missing when adding the library and attempting to use it - Solved by just overloading the global window type to have the YT property.
@@ -56,6 +78,8 @@ Based on the requirements provided, these are the assumptions I came to:
 
 5. Red Bull surfing images are coming at a different aspect ratio and look different than the others. Will have to normalize.
 
+6. Behaviour of play button not the same if you use Youtube's button. - _could hack it with just setting `autoplay=1` but that woudl be sloppy. Better fix with the eventListener for playState_
+
 ### Missing items
 
 - i18n & a11y
@@ -67,7 +91,7 @@ Based on the requirements provided, these are the assumptions I came to:
 - Overall cleanup and component organization
 - Dockerize? - Maybe overkill, maybe not?
 
-# More ideas
+### More ideas
 
 - Preview when use drags one of the markers
 

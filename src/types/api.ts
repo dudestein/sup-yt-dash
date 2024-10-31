@@ -62,6 +62,6 @@ export interface Thumbnail {
 }
 
 export interface Trim {
-  start?: number;
-  end?: number;
+  start?: number | undefined;
+  end?: number | undefined;
 }
