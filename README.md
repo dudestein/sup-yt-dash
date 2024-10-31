@@ -51,6 +51,8 @@ For the most part it follows what "create-next-app" suggest. When using opiniona
 ```
 └── 📁src
     └── 📁app
+        └── 📁api - api endpoints
+            └── 📁videos - Video api endpoint
         └── 📁assets
             └── 📁fonts
             ├── 📁images
@@ -62,7 +64,7 @@ For the most part it follows what "create-next-app" suggest. When using opiniona
             └── 📁Video - The player itself and any internal component to the player
         └── 📁context  - state management
         └── 📁helpers  - reusable supporting methods
-        └── 📁services - (previously lib/) - Holds the api functions to fetch data
+        └── 📁lib - Holds the api functions to fetch data
     └── 📁types
 ```
 
